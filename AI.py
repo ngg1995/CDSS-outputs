@@ -2,6 +2,11 @@ from manim import *
 import math
 import numpy as np
 import itertools as it
+import os
+
+p_high = 0.93
+p_mid = 0.42
+p_low = 0.17
 
 def simplify_fraction(numerator, denominator):
     if denominator == 0:
@@ -51,47 +56,129 @@ def icon_array(k,N,Y = np.linspace(-3,1.5,10),X = np.linspace(-1.5,1.5,10)):
             array.add(SVGMobject("person.svg",fill_color=green).move_to([x,y,0]).scale(0.2))
     return array
 
-class AIPrescripted(Scene):
+class AIPrescriptedPositive(Scene):
     def construct(self):
+        
         t1 = Tex("The patient is going to be assessed for D using\\\\a machine learning based\\\\clinical decision support system").move_to([0,1,0],aligned_edge=DOWN)
-
         t2 = Tex("The algorithm says that the patient has D").move_to([0,-1,0])
+
         self.play(Write(t1))
         self.play(Write(t2))
         self.wait(5)
 
-class AIProb(Scene):
+class AIPrescriptedNegative(Scene):
     def construct(self):
-        p = 0.38
+        
         t1 = Tex("The patient is going to be assessed for D using\\\\a machine learning based\\\\clinical decision support system").move_to([0,1,0],aligned_edge=DOWN)
-        t2 = Tex(f"The algorithm says that the probability of\\\\the patient having $D$ is {p}").move_to([0,-1,0])
+        t2 = Tex("The algorithm says that the patient does not have D").move_to([0,-1,0])
+
+        self.play(Write(t1))
+        self.play(Write(t2))
+        self.wait(5)
+
+class AIProbHigh(Scene):
+    def construct(self):
+
+        t1 = Tex("The patient is going to be assessed for D using\\\\a machine learning based\\\\clinical decision support system").move_to([0,1,0],aligned_edge=DOWN)
+        t2 = Tex(f"The algorithm says that the probability of\\\\the patient having $D$ is {p_high}").move_to([0,-1,0])
         
         self.play(Write(t1),run_time = 1)
         self.play(Write(t2),run_time = 1)
         self.wait(5)
 
-        
-class AINatFreq(Scene):
+class AIProbMid(Scene):
     def construct(self):
-        p = 0.73
-        t1 = Tex("The patient is going to be assessed for D using\\\\a machine learning based\\\\clinical decision support system").to_edge(UP)
-        t2 = Tex(f"The algorithm says that {nat_freq(p)}\\\\similar patients will have D")
+
+        t1 = Tex("The patient is going to be assessed for D using\\\\a machine learning based\\\\clinical decision support system").move_to([0,1,0],aligned_edge=DOWN)
+        t2 = Tex(f"The algorithm says that the probability of\\\\the patient having $D$ is {p_mid}").move_to([0,-1,0])
+        
+        self.play(Write(t1),run_time = 1)
+        self.play(Write(t2),run_time = 1)
+        self.wait(5)
+
+class AIProbLow(Scene):
+    def construct(self):
+
+        t1 = Tex("The patient is going to be assessed for D using\\\\a machine learning based\\\\clinical decision support system").move_to([0,1,0],aligned_edge=DOWN)
+        t2 = Tex(f"The algorithm says that the probability of\\\\the patient having $D$ is {p_low}").move_to([0,-1,0])
         
         self.play(Write(t1),run_time = 1)
         self.play(Write(t2),run_time = 1)
         self.wait(5)
         
-class AIIconArray(Scene):
+class AIIconArrayHigh(Scene):
     def construct(self):
-        p = 0.38
+
         N = 100
         t1 = Tex("The patient is going to be assessed for D using\\\\a machine learning based\\\\clinical decision support system").to_edge(UP)
         t2 = Tex(f"The algorithm returns the following icon array:").next_to(t1,DOWN*1.5)
         
-        t3 = Tex(f"{nat_freq(p,100)} similar patients have D").to_edge(DOWN)
-        array = icon_array(p*N,N,Y = np.linspace(-3,0,5),X = np.linspace(-3,3,20))
+        t3 = Tex(f"{nat_freq(p_high,100)} similar patients have D").to_edge(DOWN)
+        array = icon_array(p_high*N,N,Y = np.linspace(-3,0,5),X = np.linspace(-3,3,20))
         
         self.play(Write(t1),run_time = 1)
         self.play(Write(t2),run_time = 1)
         self.play(LaggedStart(*[DrawBorderThenFill(i) for i in array],lag_ratio=0.01,run_time = 2),Write(t3))
         self.wait(5)
+        
+class AIIconArrayMid(Scene):
+    def construct(self):
+
+        N = 100
+        t1 = Tex("The patient is going to be assessed for D using\\\\a machine learning based\\\\clinical decision support system").to_edge(UP)
+        t2 = Tex(f"The algorithm returns the following icon array:").next_to(t1,DOWN*1.5)
+        
+        t3 = Tex(f"{nat_freq(p_mid,100)} similar patients have D").to_edge(DOWN)
+        array = icon_array(p_mid*N,N,Y = np.linspace(-3,0,5),X = np.linspace(-3,3,20))
+        
+        self.play(Write(t1),run_time = 1)
+        self.play(Write(t2),run_time = 1)
+        self.play(LaggedStart(*[DrawBorderThenFill(i) for i in array],lag_ratio=0.01,run_time = 2),Write(t3))
+        self.wait(5)
+        
+class AIIconArrayLow(Scene):
+    def construct(self):
+
+        N = 100
+        t1 = Tex("The patient is going to be assessed for D using\\\\a machine learning based\\\\clinical decision support system").to_edge(UP)
+        t2 = Tex(f"The algorithm returns the following icon array:").next_to(t1,DOWN*1.5)
+        
+        t3 = Tex(f"{nat_freq(p_low,100)} similar patients have D").to_edge(DOWN)
+        array = icon_array(p_low*N,N,Y = np.linspace(-3,0,5),X = np.linspace(-3,3,20))
+        
+        self.play(Write(t1),run_time = 1)
+        self.play(Write(t2),run_time = 1)
+        self.play(LaggedStart(*[DrawBorderThenFill(i) for i in array],lag_ratio=0.01,run_time = 2),Write(t3))
+        self.wait(5)
+        
+        
+class AINatFreqHigh(Scene):
+    def construct(self):
+
+        t1 = Tex("The patient is going to be assessed for D using\\\\a machine learning based\\\\clinical decision support system").to_edge(UP)
+        t2 = Tex(f"The algorithm says that {nat_freq(p_high)}\\\\similar patients will have D")
+        
+        self.play(Write(t1),run_time = 1)
+        self.play(Write(t2),run_time = 1)
+        self.wait(5)
+        
+class AINatFreqMid(Scene):
+    def construct(self):
+
+        t1 = Tex("The patient is going to be assessed for D using\\\\a machine learning based\\\\clinical decision support system").to_edge(UP)
+        t2 = Tex(f"The algorithm says that {nat_freq(p_mid)}\\\\similar patients will have D")
+        
+        self.play(Write(t1),run_time = 1)
+        self.play(Write(t2),run_time = 1)
+        self.wait(5)
+        
+class AINatFreqLow(Scene):
+    def construct(self):
+
+        t1 = Tex("The patient is going to be assessed for D using\\\\a machine learning based\\\\clinical decision support system").to_edge(UP)
+        t2 = Tex(f"The algorithm says that {nat_freq(p_low)}\\\\similar patients will have D")
+        
+        self.play(Write(t1),run_time = 1)
+        self.play(Write(t2),run_time = 1)
+        self.wait(5)
+        
